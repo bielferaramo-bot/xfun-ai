@@ -739,12 +739,13 @@
     <div class="gate-card">
       <img src="assets/xfun-logo-cropped.png" style="height: 48px; width: auto; max-width: 150px; margin-bottom: 14px; object-fit: contain;" alt="Xfun Logo">
       <h2>Xfun · Área de Administração</h2>
-      <p>Digite a senha de administrador para acessar o monitor de prompts e imagens em tempo real.</p>
+      <p>Digite a senha de administrador para autenticar com token seguro de sessão e acessar o monitor em tempo real.</p>
+      <div id="gate-error" style="display: none; padding: 10px 14px; background: rgba(255, 30, 66, 0.15); border: 1px solid var(--accent); border-radius: 8px; color: #ff6b8b; font-size: 13px; margin-bottom: 14px; text-align: left; line-height: 1.4;"></div>
       <form id="gate-form">
         <input id="gate-password" class="gate-input" type="password" placeholder="Digite sua senha..." autofocus required>
         <button type="submit" class="btn btn-accent" style="width: 100%; justify-content: center;">Acessar Painel</button>
       </form>
-      <small style="display: block; margin-top: 14px; color: #a8949b; font-size: 11px;">Senha padrão: <strong>admin123</strong></small>
+      <small style="display: block; margin-top: 14px; color: #a8949b; font-size: 11px;">Proteção anti-brute force ativada (bloqueio por IP após 5 tentativas incorretas).</small>
     </div>
   </div>
 
@@ -779,15 +780,24 @@
         <span class="btn-label-mobile">Limpar</span>
       </button>
 
-      <a href="/" target="_blank" class="btn btn-accent" title="Abrir Site do Usuário">
-        <span class="btn-label-desktop">Abrir Site do Usuário</span>
-        <span class="btn-label-mobile">Ver Site</span>
+      <a href="/" target="_blank" class="btn btn-outline" title="Abrir Site do Usuário">
+        <span class="btn-label-desktop">Abrir Site</span>
+        <span class="btn-label-mobile">Site</span>
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
           <polyline points="15 3 21 3 21 9"></polyline>
           <line x1="10" y1="14" x2="21" y2="3"></line>
         </svg>
       </a>
+
+      <button id="admin-logout-btn" class="btn btn-outline" title="Encerrar sessão de administrador" style="border-color: rgba(255, 30, 66, 0.4); color: #ff6b8b;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+          <polyline points="16 17 21 12 16 7"></polyline>
+          <line x1="21" y1="12" x2="9" y2="12"></line>
+        </svg>
+        <span class="btn-label-desktop">Sair</span>
+      </button>
     </div>
   </header>
 
@@ -849,30 +859,100 @@
   </div>
 
   <script>
-    // Security Gate
+    // Security Gate & Token Management
     const gateScreen = document.getElementById('gate-screen');
     const gateForm = document.getElementById('gate-form');
     const gatePass = document.getElementById('gate-password');
+    const gateError = document.getElementById('gate-error');
 
-    if (sessionStorage.getItem('xfun_admin_auth') === 'true') {
-      gateScreen.style.display = 'none';
-      initAdmin();
-    } else {
-      gateForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        if (gatePass.value.trim() === 'admin123') {
-          sessionStorage.setItem('xfun_admin_auth', 'true');
+    function getAdminToken() {
+      return sessionStorage.getItem('xfun_admin_token') || '';
+    }
+
+    function handleUnauthorized() {
+      sessionStorage.removeItem('xfun_admin_token');
+      gateScreen.style.display = 'flex';
+      if (gateError) {
+        gateError.textContent = 'Sessão expirada ou não autorizada. Por favor, faça login novamente.';
+        gateError.style.display = 'block';
+      }
+    }
+
+    // Auto-login check with server validation
+    const savedToken = getAdminToken();
+    if (savedToken) {
+      fetch('/api/admin/submissions', {
+        headers: { 'Authorization': `Bearer ${savedToken}` }
+      })
+      .then(res => {
+        if (res.ok) {
           gateScreen.style.display = 'none';
           initAdmin();
         } else {
-          alert('Senha incorreta! A senha padrão é admin123');
+          sessionStorage.removeItem('xfun_admin_token');
+          gateScreen.style.display = 'flex';
+        }
+      })
+      .catch(() => {
+        gateScreen.style.display = 'flex';
+      });
+    } else {
+      gateScreen.style.display = 'flex';
+    }
+
+    gateForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (gateError) gateError.style.display = 'none';
+
+      const password = gatePass.value.trim();
+      if (!password) return;
+
+      const submitBtn = gateForm.querySelector('button[type="submit"]');
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Validando credenciais...';
+      }
+
+      try {
+        const res = await fetch('/api/admin/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password })
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.token) {
+          sessionStorage.setItem('xfun_admin_token', data.token);
+          gateScreen.style.display = 'none';
+          gatePass.value = '';
+          initAdmin();
+        } else {
+          if (gateError) {
+            gateError.textContent = data.error || 'Senha incorreta ou acesso bloqueado.';
+            gateError.style.display = 'block';
+          } else {
+            alert(data.error || 'Senha incorreta!');
+          }
           gatePass.value = '';
           gatePass.focus();
         }
-      });
-    }
+      } catch (err) {
+        if (gateError) {
+          gateError.textContent = 'Erro ao conectar ao servidor. Tente novamente.';
+          gateError.style.display = 'block';
+        }
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Acessar Painel';
+        }
+      }
+    });
 
     let soundEnabled = true;
+    let sseInstance = null;
+    let heartbeatInterval = null;
 
     function initAdmin() {
       loadHistory();
@@ -893,7 +973,14 @@
       // Clear button
       document.getElementById('clear-all-btn').addEventListener('click', () => {
         if (confirm('Deseja realmente limpar todo o histórico de prompts e imagens?')) {
-          fetch('/api/admin/clear', { method: 'POST' }).then(() => {
+          fetch('/api/admin/clear', {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${getAdminToken()}` }
+          }).then(res => {
+            if (res.status === 401) {
+              handleUnauthorized();
+              return;
+            }
             document.getElementById('submissions-container').innerHTML = '';
             showEmptyState();
             updateStats([]);
@@ -901,14 +988,34 @@
         }
       });
 
-      // Real-time synchronization heartbeat (every 2.5s) guaranteeing instant zero-delay updates on cloud
-      setInterval(syncAdminHistorySilently, 2500);
+      // Logout button
+      document.getElementById('admin-logout-btn')?.addEventListener('click', () => {
+        if (confirm('Deseja sair do painel administrativo?')) {
+          sessionStorage.removeItem('xfun_admin_token');
+          window.location.reload();
+        }
+      });
+
+      // Real-time synchronization heartbeat (every 2.5s)
+      if (heartbeatInterval) clearInterval(heartbeatInterval);
+      heartbeatInterval = setInterval(syncAdminHistorySilently, 2500);
     }
 
     let lastSubmissionsHash = '';
     function syncAdminHistorySilently() {
-      fetch('/api/admin/submissions')
-        .then(res => res.json())
+      const token = getAdminToken();
+      if (!token) return;
+
+      fetch('/api/admin/submissions', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+        .then(res => {
+          if (res.status === 401) {
+            handleUnauthorized();
+            return null;
+          }
+          return res.json();
+        })
         .then(data => {
           if (!data || !data.submissions) return;
           const currentHash = JSON.stringify(data.submissions.map(s => s.id + s.status + s.imageUrl + (s.deliveredVideoUrl || '')));
@@ -982,8 +1089,15 @@
 
     // Connect Server-Sent Events (SSE)
     function connectSSE() {
+      if (sseInstance) {
+        try { sseInstance.close(); } catch (e) {}
+      }
+      const token = getAdminToken();
+      if (!token) return;
+
       const connStat = document.getElementById('stat-conn-status');
-      const eventSource = new EventSource('/api/admin/stream');
+      const eventSource = new EventSource(`/api/admin/stream?token=${encodeURIComponent(token)}`);
+      sseInstance = eventSource;
 
       eventSource.onopen = () => {
         connStat.textContent = 'Conectado';
@@ -1080,9 +1194,21 @@
 
     // Load History on startup
     function loadHistory() {
-      fetch('/api/admin/submissions')
-        .then(res => res.json())
+      const token = getAdminToken();
+      if (!token) return;
+
+      fetch('/api/admin/submissions', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+        .then(res => {
+          if (res.status === 401) {
+            handleUnauthorized();
+            return null;
+          }
+          return res.json();
+        })
         .then(data => {
+          if (!data) return;
           const container = document.getElementById('submissions-container');
           container.innerHTML = '';
           if (data.submissions && data.submissions.length > 0) {
@@ -1226,6 +1352,12 @@
       const file = input.files && input.files[0];
       if (!file) return;
 
+      const token = getAdminToken();
+      if (!token) {
+        handleUnauthorized();
+        return;
+      }
+
       const progressWrap = document.getElementById(`progress-${subId}`);
       const progressBar = progressWrap ? progressWrap.querySelector('.upload-progress-fill') : null;
       const progressText = progressWrap ? progressWrap.querySelector('.upload-progress-text') : null;
@@ -1236,6 +1368,7 @@
 
       const xhr = new XMLHttpRequest();
       xhr.open('POST', `/api/admin/upload-video?submissionId=${encodeURIComponent(subId)}`, true);
+      xhr.setRequestHeader('Authorization', `Bearer ${token}`);
       xhr.setRequestHeader('Content-Type', file.type || 'video/mp4');
       xhr.setRequestHeader('X-File-Name', encodeURIComponent(file.name));
 
@@ -1248,6 +1381,10 @@
       };
 
       xhr.onload = () => {
+        if (xhr.status === 401) {
+          handleUnauthorized();
+          return;
+        }
         if (xhr.status === 200) {
           try {
             const res = JSON.parse(xhr.responseText);

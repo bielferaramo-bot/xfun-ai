@@ -1209,10 +1209,15 @@ function sendSubmissionToAdmin(payload, callback) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)
   })
-  .then(res => res.json())
-  .then(data => {
-    console.log('Enviado para a Área Admin com sucesso:', data);
-    if (callback && data.submissionId) callback(data.submissionId);
+  .then(res => res.json().then(data => ({ status: res.status, data })))
+  .then(({ status, data }) => {
+    if (status === 200 && data.success) {
+      console.log('Enviado para a Área Admin com sucesso:', data);
+      if (callback && data.submissionId) callback(data.submissionId);
+    } else if (data && data.error) {
+      console.warn('Erro retornado pelo backend:', data.error);
+      showToast('⚠️ ' + data.error);
+    }
   })
   .catch(err => {
     console.error('Falha ao enviar para o Admin:', err);
