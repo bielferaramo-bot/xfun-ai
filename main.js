@@ -139,7 +139,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initPaymentCheckout();
   initScarcityCountdown();
   initClientOrderListener();
-  initQuickPrompts();
   initMobileStickyBar();
   initSocialProof();
   initPhoneMask();
@@ -1407,24 +1406,7 @@ function escapeHTML(str) {
   );
 }
 
-// 12. Mobile-First UX: Quick Prompts
-function initQuickPrompts() {
-  const pills = document.querySelectorAll('.quick-prompt-pill');
-  const promptInput = document.getElementById('h3-showcase-prompt');
-  pills.forEach(pill => {
-    pill.addEventListener('click', () => {
-      const text = pill.getAttribute('data-prompt');
-      if (promptInput && text) {
-        promptInput.value = text;
-        promptInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        setTimeout(() => promptInput.focus(), 300);
-        showToast('💡 Ideia aplicada ao seu prompt!');
-      }
-    });
-  });
-}
-
-// 13. Mobile-First UX: Floating Bottom Sticky CTA
+// 12. Mobile-First UX: Floating Bottom Sticky CTA
 function initMobileStickyBar() {
   const stickyBar = document.getElementById('mobile-sticky-bar');
   const btn = document.getElementById('btn-mobile-sticky-action');

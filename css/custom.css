@@ -1453,55 +1453,6 @@ input, textarea, select {
   border-color: #ff1e42 !important;
 }
 
-/* Mobile Quick Prompts Pills */
-.quick-prompts-bar {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  overflow-x: auto;
-  padding: 6px 2px 8px;
-  margin: 6px 0 10px;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-}
-
-.quick-prompts-bar::-webkit-scrollbar {
-  display: none;
-}
-
-.quick-prompts-label {
-  font-size: 10.5px;
-  font-weight: 750;
-  color: #ff4d6d;
-  white-space: nowrap;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  flex-shrink: 0;
-}
-
-.quick-prompt-pill {
-  white-space: nowrap;
-  font-size: 11px;
-  font-weight: 600;
-  padding: 5px 11px;
-  border-radius: 999px;
-  background: #170d13;
-  border: 1px solid #3a1925;
-  color: #e4d7dc;
-  cursor: pointer;
-  flex-shrink: 0;
-  transition: all 0.15s ease;
-  user-select: none;
-}
-
-.quick-prompt-pill:hover,
-.quick-prompt-pill:active {
-  background: #ff1e42;
-  color: #ffffff;
-  border-color: #ff1e42;
-  transform: translateY(-1px);
-}
-
 /* High-Converting Hero Generate Button */
 .h3-showcase__generate-button--hero {
   width: 100% !important;
