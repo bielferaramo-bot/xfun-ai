@@ -134,8 +134,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initGallery();
   initControls();
   initModals();
-  initCreatorChat();
-  initLanguagePicker();
   initPaymentCheckout();
   initScarcityCountdown();
   initClientOrderListener();
@@ -144,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initPhoneMask();
 });
 
-// Update Header & Prompt lock based on Login status
+// Update Header & Status UI based on Login status
 function updateAuthUI() {
   const guestBox = document.getElementById('user-guest-box');
   const loggedBox = document.getElementById('user-logged-box');
@@ -152,16 +150,16 @@ function updateAuthUI() {
   const promptInput = document.getElementById('h3-showcase-prompt');
   const usageText = document.querySelector('.h3-showcase__usage');
 
+  if (promptInput) {
+    promptInput.readOnly = false;
+    promptInput.style.cursor = 'text';
+    promptInput.style.opacity = '1';
+  }
+
   if (isUserLoggedIn()) {
     if (guestBox) guestBox.style.display = 'none';
     if (loggedBox) loggedBox.style.display = 'flex';
     if (displayName) displayName.textContent = `👤 Olá, ${currentUser.name.split(' ')[0]}`;
-
-    if (promptInput) {
-      promptInput.readOnly = false;
-      promptInput.style.cursor = 'text';
-      promptInput.style.opacity = '1';
-    }
 
     if (usageText) {
       usageText.textContent = `MiniMax H3 · ${currentResolution} · ${currentDuration}s · Pronto para gerar`;
@@ -170,14 +168,8 @@ function updateAuthUI() {
     if (guestBox) guestBox.style.display = 'flex';
     if (loggedBox) loggedBox.style.display = 'none';
 
-    if (promptInput) {
-      promptInput.readOnly = true;
-      promptInput.style.cursor = 'pointer';
-      promptInput.style.opacity = '0.7';
-    }
-
     if (usageText) {
-      usageText.textContent = `MiniMax H3 · ${currentResolution} · ${currentDuration}s · Cadastre-se para gerar`;
+      usageText.textContent = `MiniMax H3 · ${currentResolution} · ${currentDuration}s · Oferta R$ 4,99`;
     }
   }
 }
@@ -352,34 +344,10 @@ function initControls() {
   const promptSection = document.querySelector('.h3-showcase__prompt');
   const refSection = document.querySelector('.h3-showcase__reference');
 
-  // GATING: Interceptar QUALQUER clique na área de Prompt se não estiver logado
-  if (promptSection) {
-    promptSection.addEventListener('click', (e) => {
-      if (!isUserLoggedIn()) {
-        e.preventDefault();
-        e.stopPropagation();
-        openAuthModal('signup', '🔒 Crie sua conta para digitar seus prompts!');
-      }
-    }, true);
-  }
-
-  // GATING: Interceptar QUALQUER clique na área de Imagem de Referência se não estiver logado
-  if (refSection) {
-    refSection.addEventListener('click', (e) => {
-      if (!isUserLoggedIn()) {
-        e.preventDefault();
-        e.stopPropagation();
-        openAuthModal('signup', '🔒 Crie sua conta para fazer upload de imagens!');
-      }
-    }, true);
-  }
-
-  // Upload de Imagem real (para usuários logados)
+  // Upload de Imagem real para qualquer visitante
   if (changeImgBtn && fileInput) {
-    changeImgBtn.addEventListener('click', (e) => {
-      if (isUserLoggedIn()) {
-        fileInput.click();
-      }
+    changeImgBtn.addEventListener('click', () => {
+      fileInput.click();
     });
 
     fileInput.addEventListener('change', (e) => {
@@ -423,10 +391,6 @@ function initControls() {
   // Clear prompt
   if (clearBtn) {
     clearBtn.addEventListener('click', () => {
-      if (!isUserLoggedIn()) {
-        openAuthModal('signup', 'Cadastre-se para editar prompts!');
-        return;
-      }
       promptInput.value = '';
       promptInput.focus();
       showToast('Prompt limpo!');
@@ -1077,7 +1041,6 @@ function checkOrderStatus(orderId) {
 function initModals() {
   const loginBtns = document.querySelectorAll('.h3-showcase__login:not(#btn-logout)');
   const signupBtns = document.querySelectorAll('.h3-showcase__signup');
-  const buyCreditsBtns = document.querySelectorAll('.h3-showcase__buy-credits');
   const logoutBtn = document.getElementById('btn-logout');
 
   const authModalBackdrop = document.getElementById('auth-modal-backdrop');
@@ -1086,9 +1049,6 @@ function initModals() {
   const tabLogin = document.getElementById('tab-login');
   const signupForm = document.getElementById('signup-form');
   const loginForm = document.getElementById('login-form');
-
-  const creditsBackdrop = document.getElementById('credits-drawer-backdrop');
-  const creditsClose = document.getElementById('credits-drawer-close');
 
   // Tabs switching
   if (tabSignup && tabLogin) {
@@ -1174,6 +1134,8 @@ function initModals() {
           setCurrentUser(data.user);
           authModalBackdrop.classList.remove('is-open');
           showToast(`🎉 Cadastro realizado com sucesso! Bem-vindo, ${data.user.name}!`);
+          // Flui direto para o checkout PIX sem atrito
+          handleGenerateClick();
         } else {
           errorDiv.textContent = data.error || 'Erro ao realizar cadastro.';
           errorDiv.style.display = 'block';
@@ -1207,6 +1169,8 @@ function initModals() {
           setCurrentUser(data.user);
           authModalBackdrop.classList.remove('is-open');
           showToast(`Bem-vindo de volta, ${data.user.name}!`);
+          // Flui direto para o checkout PIX sem atrito
+          handleGenerateClick();
         } else {
           errorDiv.textContent = data.error || 'E-mail ou senha incorretos.';
           errorDiv.style.display = 'block';
@@ -1216,33 +1180,6 @@ function initModals() {
         errorDiv.textContent = 'Erro ao conectar com o servidor.';
         errorDiv.style.display = 'block';
       });
-    });
-  }
-
-  // Credits Drawer
-  buyCreditsBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      creditsBackdrop.classList.add('is-open');
-    });
-  });
-
-  if (creditsClose) {
-    creditsClose.addEventListener('click', () => {
-      creditsBackdrop.classList.remove('is-open');
-    });
-  }
-
-  creditsBackdrop.addEventListener('click', (e) => {
-    if (e.target === creditsBackdrop) {
-      creditsBackdrop.classList.remove('is-open');
-    }
-  });
-
-  const buyCreditsAction = document.getElementById('buy-credits-action');
-  if (buyCreditsAction) {
-    buyCreditsAction.addEventListener('click', () => {
-      creditsBackdrop.classList.remove('is-open');
-      openPaymentModal();
     });
   }
 }
@@ -1263,92 +1200,6 @@ function openAuthModal(tab = 'signup', message = '') {
   }
 
   authModalBackdrop.classList.add('is-open');
-}
-
-// 8. Creator Chat
-function initCreatorChat() {
-  const promoClose = document.querySelector('.creator-chat-promo__close');
-  const promoCard = document.querySelector('.creator-chat-promo');
-  const promoAction = document.querySelector('.creator-chat-promo__action');
-  const launcher = document.querySelector('.creator-chat-launcher');
-  const chatPanel = document.getElementById('creator-chat-panel');
-  const chatClose = document.getElementById('creator-chat-close');
-  const chatComposer = document.getElementById('creator-chat-composer');
-  const chatInput = document.getElementById('creator-chat-msg-input');
-  const chatMessages = document.getElementById('creator-chat-messages');
-
-  if (promoClose && promoCard) {
-    promoClose.addEventListener('click', () => {
-      promoCard.style.display = 'none';
-    });
-  }
-
-  const toggleChat = () => {
-    if (chatPanel) {
-      const isOpen = chatPanel.classList.toggle('is-open');
-      if (promoCard) promoCard.style.display = 'none';
-      if (isOpen && chatInput) chatInput.focus();
-    }
-  };
-
-  if (launcher) launcher.addEventListener('click', toggleChat);
-  if (promoAction) promoAction.addEventListener('click', toggleChat);
-  if (chatClose) chatClose.addEventListener('click', toggleChat);
-
-  if (chatComposer) {
-    chatComposer.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const msg = chatInput.value.trim();
-      if (!msg) return;
-
-      const userMsgDiv = document.createElement('div');
-      userMsgDiv.className = 'creator-chat-message creator-chat-message--user';
-      userMsgDiv.innerHTML = `<span>${escapeHTML(msg)}</span>`;
-      chatMessages.appendChild(userMsgDiv);
-      chatInput.value = '';
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-
-      setTimeout(() => {
-        const replyDiv = document.createElement('div');
-        replyDiv.className = 'creator-chat-message creator-chat-message--admin';
-        replyDiv.innerHTML = `<span>Olá! Recebemos sua mensagem do Creator Program. Responderemos em breve!</span>`;
-        chatMessages.appendChild(replyDiv);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-      }, 1000);
-    });
-  }
-}
-
-// 9. Language Picker
-function initLanguagePicker() {
-  const langBtn = document.querySelector('.h3-showcase__lang-button');
-  const langMenu = document.getElementById('lang-dropdown-menu');
-  const langName = document.querySelector('.h3-showcase__lang-name');
-
-  if (langBtn && langMenu) {
-    langBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const isOpen = langMenu.classList.toggle('is-open');
-      langBtn.setAttribute('aria-expanded', isOpen);
-    });
-
-    langMenu.querySelectorAll('.dropdown-item').forEach(item => {
-      item.addEventListener('click', () => {
-        const label = item.textContent.trim();
-        langName.textContent = label;
-        langMenu.classList.remove('is-open');
-        langBtn.setAttribute('aria-expanded', 'false');
-        showToast(`Idioma alterado para: ${label}`);
-      });
-    });
-
-    document.addEventListener('click', () => {
-      if (langMenu.classList.contains('is-open')) {
-        langMenu.classList.remove('is-open');
-        langBtn.setAttribute('aria-expanded', 'false');
-      }
-    });
-  }
 }
 
 // 10. Envio para Admin via API

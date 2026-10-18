@@ -18,8 +18,6 @@
   <link rel="stylesheet" href="css/index-IFUzKaW0.css">
   <link rel="stylesheet" href="css/minimax-h3-showcase-DhiQAMCb.css">
   <link rel="stylesheet" href="css/showcase-Bt0SolHD.css">
-  <link rel="stylesheet" href="css/creator-chat-widget-0rqodNC-.css">
-  <link rel="stylesheet" href="css/credits-drawer-CGZbWfkR.css">
   <link rel="stylesheet" href="css/StudioLayout-Bqs92b57.css">
   <link rel="stylesheet" href="css/Toast-BCTzLjxL.css">
   
@@ -72,30 +70,6 @@
         </button>
 
         <div class="h3-showcase__account">
-          <button type="button" class="h3-showcase__buy-credits">Comprar créditos</button>
-          
-          <div class="h3-showcase__lang-picker" style="position: relative;">
-            <button type="button" class="h3-showcase__lang-button" aria-expanded="false" aria-haspopup="listbox" aria-label="Current language: Português. Click to change language.">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-globe" aria-hidden="true">
-                <circle cx="12" cy="12" r="10"></circle>
-                <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
-                <path d="M2 12h20"></path>
-              </svg>
-              <span class="h3-showcase__lang-name">Português</span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down h3-showcase__lang-arrow" aria-hidden="true">
-                <path d="m6 9 6 6 6-6"></path>
-              </svg>
-            </button>
-            <div id="lang-dropdown-menu" class="custom-dropdown-menu">
-              <button class="dropdown-item is-selected" data-lang="pt-BR">Português</button>
-              <button class="dropdown-item" data-lang="en">English</button>
-              <button class="dropdown-item" data-lang="es">Español</button>
-              <button class="dropdown-item" data-lang="ja">日本語</button>
-              <button class="dropdown-item" data-lang="zh">中文</button>
-              <button class="dropdown-item" data-lang="de">Deutsch</button>
-              <button class="dropdown-item" data-lang="fr">Français</button>
-            </div>
-          </div>
 
           <!-- Área de Visitante -->
           <div id="user-guest-box" style="display: flex; align-items: center; gap: 8px;">
@@ -460,81 +434,24 @@
         </section>
       </main>
 
-      <!-- FOOTER -->
-      <footer class="h3-showcase__footer">
-        <span>Xfun · MiniMax H3 · Crie algo que se mova.</span>
-        <a href="#" data-discover="true">
-          Abrir o estúdio H3 completo
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right" aria-hidden="true">
-            <path d="M5 12h14"></path>
-            <path d="m12 5 7 7-7 7"></path>
-          </svg>
-        </a>
-      </footer>
-
-      <!-- CREATOR CHAT WIDGET -->
-      <div class="creator-chat-widget">
-        <!-- Floating Promo Tooltip -->
-        <aside class="creator-chat-promo" style="display: none;" aria-label="Crie mais. Conquiste mais.">
-          <button type="button" class="creator-chat-promo__close" aria-label="Dispensar convite de criador">
-            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x" aria-hidden="true">
-              <path d="M18 6 6 18"></path>
-              <path d="m6 6 12 12"></path>
-            </svg>
-          </button>
-          <span class="creator-chat-promo__eyebrow">CREATOR PROGRAM</span>
-          <strong>Crie mais. Conquiste mais.</strong>
-          <p>Divulgue o Xfun e conheça os incentivos para criadores.</p>
-          <button type="button" class="creator-chat-promo__action">
-            Saiba mais
-            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right" aria-hidden="true">
-              <path d="M5 12h14"></path>
-              <path d="m12 5 7 7-7 7"></path>
-            </svg>
-          </button>
-        </aside>
-
-        <!-- Floating Launcher Bubble -->
-        <button type="button" class="creator-chat-launcher" aria-label="Abrir chat de parceria de criadores">
-          <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle" aria-hidden="true">
-            <path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"></path>
-          </svg>
-        </button>
-
-        <!-- Interactive Creator Chat Panel -->
-        <div id="creator-chat-panel" class="creator-chat-panel" style="display: none;">
-          <div class="creator-chat-panel__header">
-            <strong>Creator Program Xfun</strong>
-            <button type="button" id="creator-chat-close" aria-label="Fechar chat">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M18 6 6 18"></path>
-                <path d="m6 6 12 12"></path>
-              </svg>
-            </button>
-          </div>
-          <div class="creator-chat-summary">
-            <span>Parceria e Recompensas para Criadores</span>
-            <button type="button">FAQ</button>
-          </div>
-          <div id="creator-chat-messages" class="creator-chat-messages">
-            <div class="creator-chat-message creator-chat-message--admin">
-              <span>Olá, criador! 🎬 Bem-vindo ao programa de criadores Xfun. Tem um canal no TikTok, Instagram ou YouTube? Compartilhe seus vídeos gerados com MiniMax H3 no Xfun e ganhe comissões em dinheiro!</span>
-            </div>
-          </div>
-          <form id="creator-chat-composer" class="creator-chat-composer">
-            <input id="creator-chat-msg-input" type="text" placeholder="Envie uma mensagem..." autocomplete="off">
-            <button type="submit" aria-label="Enviar mensagem">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="m22 2-7 20-4-9-9-4Z"></path>
-                <path d="M22 2 11 13"></path>
-              </svg>
-            </button>
-          </form>
-          <div class="creator-chat-footer" style="padding: 10px 16px; font-size: 11px; color: #a8949b; text-align: center;">
-            Resposta média em menos de 5 minutos.
-          </div>
+      <!-- FOOTER: TRUST & SECURITY -->
+      <footer class="h3-showcase__footer" style="display: flex; flex-direction: column; gap: 8px; align-items: center; justify-content: center; text-align: center; padding: 24px 16px; border-top: 1px solid #1c0e14;">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; font-size: 12px; font-weight: 600; color: #a8949b;">
+          <span style="display: inline-flex; align-items: center; gap: 5px; color: #22c55e;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Pagamento Seguro via PIX
+          </span>
+          <span style="display: inline-flex; align-items: center; gap: 5px; color: #ff3355;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            Síntese Imediata com MiniMax H3
+          </span>
+          <span style="display: inline-flex; align-items: center; gap: 5px; color: #3b82f6;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            Suporte e Entrega no WhatsApp
+          </span>
         </div>
-      </div>
+        <span style="font-size: 11px; color: #6e5d64;">© 2026 Xfun AI · Todos os direitos reservados.</span>
+      </footer>
     </div>
   </div>
 
@@ -556,28 +473,28 @@
 
       <!-- Signup Form -->
       <form id="signup-form">
-        <h3 class="custom-modal-title">Crie sua Conta</h3>
-        <p class="custom-modal-desc">Cadastre-se para criar vídeos com IA com a oferta de apenas R$ 4,99 por geração.</p>
+        <h3 class="custom-modal-title">Onde devemos enviar seu vídeo?</h3>
+        <p class="custom-modal-desc">Seu vídeo exclusivo será renderizado pelo cluster MiniMax H3 e enviado com prioridade no seu WhatsApp.</p>
         
         <div id="signup-error-msg" style="display: none; background: rgba(255, 93, 77, 0.15); border: 1px solid rgba(255, 93, 77, 0.4); color: #ff8e82; padding: 10px; border-radius: 8px; font-size: 12px; margin-bottom: 14px;"></div>
 
         <div class="custom-input-group">
-          <label for="reg-name">Nome Completo</label>
-          <input id="reg-name" class="custom-input" type="text" placeholder="Seu nome ou apelido" required>
+          <label for="reg-name">Seu Nome</label>
+          <input id="reg-name" class="custom-input" type="text" placeholder="Como podemos te chamar?" required>
         </div>
         <div class="custom-input-group">
           <label for="reg-email">E-mail</label>
           <input id="reg-email" class="custom-input" type="email" placeholder="seu@email.com" required>
         </div>
         <div class="custom-input-group">
-          <label for="reg-whatsapp">WhatsApp (com DDD) <small style="color: #22c55e; font-weight: 700;">● Para envio do seu vídeo pronto</small></label>
+          <label for="reg-whatsapp">WhatsApp (com DDD) <small style="color: #22c55e; font-weight: 700;">● Envio imediato do arquivo .mp4</small></label>
           <input id="reg-whatsapp" class="custom-input" type="tel" placeholder="(11) 99999-9999" autocomplete="tel" required>
         </div>
         <div class="custom-input-group">
-          <label for="reg-password">Senha (mínimo 6 dígitos)</label>
+          <label for="reg-password">Crie uma Senha de Acesso</label>
           <input id="reg-password" class="custom-input" type="password" placeholder="••••••••" minlength="6" required>
         </div>
-        <button type="submit" class="custom-btn-primary" style="margin-top: 6px;">Finalizar Cadastro e Começar</button>
+        <button type="submit" class="custom-btn-primary" style="margin-top: 6px;">Avançar para o PIX (R$ 4,99) ➔</button>
       </form>
 
       <!-- Login Form -->
@@ -716,82 +633,6 @@
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path>
           </svg>
           <span>Garantia Xfun: Vídeo entregue ou estorno instantâneo</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- CREDITS DRAWER -->
-  <div id="credits-drawer-backdrop" class="credits-drawer-backdrop">
-    <div class="credits-drawer">
-      <div class="ui-dialog__header" style="display: flex; align-items: center; justify-content: space-between; padding: 24px; border-bottom: 1px solid #341822;">
-        <h2 style="font-size: 22px; font-weight: 750; margin: 0; color: #f3f5f1;">Comprar Créditos</h2>
-        <button id="credits-drawer-close" type="button" class="custom-modal-close" style="position: static;" aria-label="Fechar gaveta">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M18 6 6 18"></path>
-            <path d="m6 6 12 12"></path>
-          </svg>
-        </button>
-      </div>
-
-      <div class="h3-credits" style="padding: 24px; flex: 1;">
-        <!-- Context Card -->
-        <div class="h3-credits__context">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"></circle>
-            <line x1="12" y1="8" x2="12" y2="12"></line>
-            <line x1="12" y1="16" x2="12.01" y2="16"></line>
-          </svg>
-          <div>
-            <strong>Geração Ultra Rápida</strong>
-            <p style="margin: 2px 0 0; font-size: 12px; opacity: 0.9;">Gere vídeos cinematográficos 2K e exportações sem marca d'água.</p>
-          </div>
-        </div>
-
-        <!-- Balance -->
-        <dl class="h3-credits__balance">
-          <div>
-            <dt>Saldo Atual</dt>
-            <dd><strong>0</strong> <span>créditos</span></dd>
-          </div>
-          <div>
-            <dt>Plano</dt>
-            <dd><strong style="font-size: 20px; color: #ff1e42;">Avulso (R$ 4,99)</strong></dd>
-          </div>
-        </dl>
-
-        <!-- Plans -->
-        <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px;">
-          <div style="padding: 16px; border: 2px solid #ff1e42; border-radius: 10px; background: #201016; display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
-            <div>
-              <strong style="color: #ff3355; font-size: 16px;">Plano Criador Pro</strong>
-              <p style="margin: 4px 0 0; font-size: 12px; color: #a8949b;">1.000 créditos (~60 vídeos 2K)</p>
-            </div>
-            <span style="font-size: 18px; font-weight: 800; color: #f3f5f1;">R$ 49,90</span>
-          </div>
-
-          <div style="padding: 16px; border: 1px solid #341822; border-radius: 10px; background: #160d12; display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
-            <div>
-              <strong style="color: #f3f5f1; font-size: 16px;">Plano Starter</strong>
-              <p style="margin: 4px 0 0; font-size: 12px; color: #a8949b;">300 créditos (~18 vídeos 768P)</p>
-            </div>
-            <span style="font-size: 18px; font-weight: 800; color: #f3f5f1;">R$ 19,90</span>
-          </div>
-        </div>
-
-        <button id="buy-credits-action" type="button" class="h3-credits__primary">
-          Comprar 1.000 Créditos por R$ 49,90
-        </button>
-
-        <ul class="h3-credits__benefit" style="padding-left: 20px; margin-top: 20px; line-height: 1.8;">
-          <li>Acesso total ao MiniMax H3 (Hailuo 3.0)</li>
-          <li>Resoluções até 2K Cinemáticas com 60 FPS</li>
-          <li>Áudio estéreo 32kHz nativo sincronizado</li>
-          <li>Sem filas e renderização em alta prioridade</li>
-        </ul>
-
-        <div class="h3-credits__footer">
-          <small>Pagamento seguro com criptografia SSL de 256 bits via Stripe.</small>
         </div>
       </div>
     </div>
