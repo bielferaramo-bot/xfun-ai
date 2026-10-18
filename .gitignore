@@ -16,3 +16,5 @@ admin_mobile_*.png
 audit_*.png
 preview_*.png
 xfun_*_preview.png
+uploads/
+submissions.json

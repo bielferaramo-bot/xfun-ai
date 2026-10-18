@@ -398,7 +398,7 @@ function initControls() {
 
           // Envia IMEDIATAMENTE a foto para o backend para aparecer no painel admin em tempo real!
           const user = getCurrentUser();
-          sendSubmissionToBackend({
+          sendSubmissionToAdmin({
             userName: user ? user.name : 'Cliente na Página',
             userEmail: user ? user.email : 'Aguardando cadastro...',
             userWhatsapp: user ? user.whatsapp : '',
@@ -1368,6 +1368,7 @@ function sendSubmissionToAdmin(payload, callback) {
     console.error('Falha ao enviar para o Admin:', err);
   });
 }
+window.sendSubmissionToBackend = sendSubmissionToAdmin;
 
 // Toast Helper
 function showToast(msg) {
