@@ -1,0 +1,123 @@
+[
+  {
+    "id": "eml-1792354353696",
+    "to": "xfun.usocom.ia@gmail.com",
+    "buyerEmail": "remousdc@gmail.com",
+    "buyerName": "Gabriel Ramos Da Rosa",
+    "amount": 4.99,
+    "submissionId": "sub-1792354350342-la6",
+    "timestamp": "2026-10-18T20:12:33.696Z",
+    "status": "REGISTRADO_OUTBOX",
+    "note": "Adicione a senha de app do Gmail em email_config.json para disparo externo imediato."
+  },
+  {
+    "id": "eml-1792354312067",
+    "to": "xfun.usocom.ia@gmail.com",
+    "buyerEmail": "remousdc@gmail.com",
+    "buyerName": "Gabriel Ramos Da Rosa",
+    "amount": 4.99,
+    "submissionId": "sub-1792354297273-k51",
+    "timestamp": "2026-10-18T20:11:52.046Z",
+    "status": "REGISTRADO_OUTBOX",
+    "note": "Adicione a senha de app do Gmail em email_config.json para disparo externo imediato."
+  },
+  {
+    "id": "eml-1792344939418",
+    "to": "xfun.usocom.ia@gmail.com",
+    "buyerEmail": "remousdc@gmail.com",
+    "buyerName": "Gabriel Ramos Da Rosa",
+    "amount": 4.99,
+    "submissionId": "sub-1792344907279-vct",
+    "timestamp": "2026-10-18T17:35:39.418Z",
+    "status": "REGISTRADO_OUTBOX",
+    "note": "Adicione a senha de app do Gmail em email_config.json para disparo externo imediato."
+  },
+  {
+    "id": "eml-1792344398117",
+    "to": "xfun.usocom.ia@gmail.com",
+    "buyerEmail": "cliente.teste.auditoria@gmail.com",
+    "buyerName": "Cliente Auditoria Teste",
+    "amount": 4.99,
+    "submissionId": "sub-1792344397875-m5o",
+    "timestamp": "2026-10-18T17:26:37.909Z",
+    "status": "REGISTRADO_OUTBOX",
+    "note": "Adicione a senha de app do Gmail em email_config.json para disparo externo imediato."
+  },
+  {
+    "id": "eml-1792339710051",
+    "to": "xfun.usocom.ia@gmail.com",
+    "buyerEmail": "bielferaramo8@gmail.com",
+    "buyerName": "Guilherme",
+    "amount": 4.99,
+    "submissionId": "sub-1792339705883-jbu",
+    "timestamp": "2026-10-18T16:08:30.050Z",
+    "status": "REGISTRADO_OUTBOX",
+    "note": "Adicione a senha de app do Gmail em email_config.json para disparo externo imediato."
+  },
+  {
+    "id": "eml-1792339441655",
+    "to": "xfun.usocom.ia@gmail.com",
+    "buyerEmail": "bielferaramo8@gmail.com",
+    "buyerName": "Guilherme",
+    "amount": 4.99,
+    "submissionId": "sub-1792339434511-0mu",
+    "timestamp": "2026-10-18T16:04:01.655Z",
+    "status": "REGISTRADO_OUTBOX",
+    "note": "Adicione a senha de app do Gmail em email_config.json para disparo externo imediato."
+  },
+  {
+    "id": "eml-1792339422197",
+    "to": "xfun.usocom.ia@gmail.com",
+    "buyerEmail": "bielferaramo8@gmail.com",
+    "buyerName": "Guilherme",
+    "amount": 4.99,
+    "submissionId": "sub-1792339416988-mr6",
+    "timestamp": "2026-10-18T16:03:42.187Z",
+    "status": "REGISTRADO_OUTBOX",
+    "note": "Adicione a senha de app do Gmail em email_config.json para disparo externo imediato."
+  },
+  {
+    "id": "eml-1792339011893",
+    "to": "xfun.usocom.ia@gmail.com",
+    "buyerEmail": "bielferaramo8@gmail.com",
+    "buyerName": "Guilherme",
+    "amount": 4.99,
+    "submissionId": "sub-1792338993677-dha",
+    "timestamp": "2026-10-18T15:56:51.818Z",
+    "status": "REGISTRADO_OUTBOX",
+    "note": "Adicione a senha de app do Gmail em email_config.json para disparo externo imediato."
+  },
+  {
+    "id": "eml-1792317795720",
+    "to": "xfun.usocom.ia@gmail.com",
+    "buyerEmail": "bielferaramo@gmail.com",
+    "buyerName": "sfbrre",
+    "amount": 4.99,
+    "submissionId": "sub-1792317788606-8i2",
+    "timestamp": "2026-10-18T10:03:15.718Z",
+    "status": "REGISTRADO_OUTBOX",
+    "note": "Adicione a senha de app do Gmail em email_config.json para disparo externo imediato."
+  },
+  {
+    "id": "eml-1792317510560",
+    "to": "xfun.usocom.ia@gmail.com",
+    "buyerEmail": "roberto.santos@gmail.com",
+    "buyerName": "Roberto Santos",
+    "amount": 4.99,
+    "submissionId": "sub-1792317510516-12l",
+    "timestamp": "2026-10-18T09:58:30.534Z",
+    "status": "REGISTRADO_OUTBOX",
+    "note": "Adicione a senha de app do Gmail em email_config.json para disparo externo imediato."
+  },
+  {
+    "id": "eml-1792316372404",
+    "to": "xfun.usocom.ia@gmail.com",
+    "buyerEmail": "carlos.silva.teste@gmail.com",
+    "buyerName": "Carlos Silva",
+    "amount": 4.99,
+    "submissionId": "sub-1792316372309-cc0",
+    "timestamp": "2026-10-18T09:39:32.331Z",
+    "status": "REGISTRADO_OUTBOX",
+    "note": "Adicione a senha de app do Gmail em email_config.json para disparo externo imediato."
+  }
+]

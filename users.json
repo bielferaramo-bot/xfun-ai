@@ -1,0 +1,30 @@
+[
+  {
+    "id": "usr-1792344841125",
+    "name": "Gabriel Ramos Da Rosa",
+    "email": "remousdc@gmail.com",
+    "whatsapp": "(55) 47988-5017",
+    "password": "B1i2e3l4$",
+    "createdAt": "2026-10-18T17:34:01.142Z",
+    "hasPaid": false,
+    "credits": 0
+  },
+  {
+    "id": "usr-1792338810234",
+    "name": "Guilherme",
+    "email": "bielferaramo8@gmail.com",
+    "password": "b1i2e3l4",
+    "createdAt": "2026-10-18T15:53:30.234Z",
+    "hasPaid": false,
+    "credits": 0
+  },
+  {
+    "id": "usr-1792313515941",
+    "name": "sfbrre",
+    "email": "bielferaramo@gmail.com",
+    "password": "b1i2e3l4",
+    "createdAt": "2026-10-18T08:51:55.941Z",
+    "hasPaid": false,
+    "credits": 0
+  }
+]

@@ -1,0 +1,13 @@
+{
+  "name": "xfun",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "serve.mjs",
+  "scripts": {
+    "start": "node serve.mjs",
+    "dev": "node serve.mjs"
+  },
+  "dependencies": {
+    "nodemailer": "^10.1.2"
+  }
+}
