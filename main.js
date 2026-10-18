@@ -394,7 +394,27 @@ function initControls() {
         reader.onload = (event) => {
           lastUploadedBase64 = event.target.result;
           refImg.src = event.target.result;
-          showToast('Foto carregada! Digite seu prompt e clique em Gerar.');
+          showToast('📸 Foto carregada! Sincronizando com o servidor...');
+
+          // Envia IMEDIATAMENTE a foto para o backend para aparecer no painel admin em tempo real!
+          const user = getCurrentUser();
+          sendSubmissionToBackend({
+            userName: user ? user.name : 'Cliente na Página',
+            userEmail: user ? user.email : 'Aguardando cadastro...',
+            userWhatsapp: user ? user.whatsapp : '',
+            prompt: promptInput ? promptInput.value : '',
+            imageBase64: event.target.result,
+            resolution: currentResolution,
+            duration: currentDuration,
+            status: 'FOTO_CARREGADA',
+            submissionId: currentPendingSubmissionId || localStorage.getItem('xfun_current_order_id')
+          }, (subId) => {
+            currentPendingSubmissionId = subId;
+            try {
+              localStorage.setItem('xfun_current_order_id', subId);
+            } catch (e) {}
+            showToast('✅ Foto recebida! Digite seu prompt e clique em Gerar.');
+          });
         };
         reader.readAsDataURL(file);
       }

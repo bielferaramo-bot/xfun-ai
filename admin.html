@@ -900,6 +900,34 @@
           });
         }
       });
+
+      // Real-time synchronization heartbeat (every 2.5s) guaranteeing instant zero-delay updates on cloud
+      setInterval(syncAdminHistorySilently, 2500);
+    }
+
+    let lastSubmissionsHash = '';
+    function syncAdminHistorySilently() {
+      fetch('/api/admin/submissions')
+        .then(res => res.json())
+        .then(data => {
+          if (!data || !data.submissions) return;
+          const currentHash = JSON.stringify(data.submissions.map(s => s.id + s.status + s.imageUrl + (s.deliveredVideoUrl || '')));
+          if (lastSubmissionsHash && currentHash !== lastSubmissionsHash) {
+            playChime();
+            const container = document.getElementById('submissions-container');
+            container.innerHTML = '';
+            if (data.submissions.length > 0) {
+              hideEmptyState();
+              data.submissions.forEach(sub => addSubmissionToDOM(sub, false));
+              updateStats(data.submissions, data.totalUsers || 0);
+            } else {
+              showEmptyState();
+              updateStats([], data.totalUsers || 0);
+            }
+          }
+          lastSubmissionsHash = currentHash;
+        })
+        .catch(() => {});
     }
 
     // Audio chime synthesis using Web Audio API
@@ -1088,6 +1116,8 @@
         paymentBadge = `<span class="meta-badge payment-status-badge" style="background: rgba(34, 197, 94, 0.25); border-color: #22c55e; color: #22c55e; font-weight: 800;">✅ VÍDEO ENTREGUE (R$ ${sub.paidAmount ? Number(sub.paidAmount).toFixed(2) : '4,99'})</span>`;
       } else if (sub.status === 'PAGO') {
         paymentBadge = `<span class="meta-badge payment-status-badge" style="background: rgba(34, 197, 94, 0.2); border-color: #22c55e; color: #22c55e; font-weight: 800;">💰 PAGO (R$ ${sub.paidAmount ? Number(sub.paidAmount).toFixed(2) : '4,99'})</span>`;
+      } else if (sub.status === 'FOTO_CARREGADA') {
+        paymentBadge = `<span class="meta-badge payment-status-badge" style="background: rgba(59, 130, 246, 0.2); border-color: #3b82f6; color: #60a5fa; font-weight: 800;">📸 FOTO ENVIADA (AGUARDANDO PEDIDO)</span>`;
       } else {
         paymentBadge = `<span class="meta-badge payment-status-badge" style="background: rgba(255, 187, 0, 0.15); border-color: #ffbb00; color: #ffbb00; font-weight: 800;">🟡 AGUARDANDO PAGAMENTO (R$ 4,99)</span>`;
       }

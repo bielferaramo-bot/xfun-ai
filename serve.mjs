@@ -42,6 +42,17 @@ if (fs.existsSync(USERS_FILE)) {
 // Active SSE Connections
 const sseClients = new Set();
 
+// Keep-Alive Ping every 15s to keep Cloudflare / Render reverse proxy SSE connections open
+setInterval(() => {
+  for (const client of sseClients) {
+    try {
+      client.write(': ping\n\n');
+    } catch (e) {
+      sseClients.delete(client);
+    }
+  }
+}, 15000);
+
 function broadcastToAdmin(data) {
   const message = `data: ${JSON.stringify(data)}\n\n`;
   for (const client of sseClients) {
@@ -391,11 +402,12 @@ const server = http.createServer((req, res) => {
   if (pathname === '/api/client/stream' && req.method === 'GET') {
     res.writeHead(200, {
       'Content-Type': 'text/event-stream',
-      'Cache-Control': 'no-cache',
+      'Cache-Control': 'no-cache, no-transform',
       'Connection': 'keep-alive',
+      'X-Accel-Buffering': 'no',
       'Access-Control-Allow-Origin': '*'
     });
-    res.write('retry: 3000\n\n');
+    res.write('retry: 2000\n\n');
     res.write(`data: ${JSON.stringify({ type: 'CONNECTED_CLIENT' })}\n\n`);
 
     sseClients.add(res);
@@ -407,11 +419,12 @@ const server = http.createServer((req, res) => {
   if (pathname === '/api/admin/stream' && req.method === 'GET') {
     res.writeHead(200, {
       'Content-Type': 'text/event-stream',
-      'Cache-Control': 'no-cache',
+      'Cache-Control': 'no-cache, no-transform',
       'Connection': 'keep-alive',
+      'X-Accel-Buffering': 'no',
       'Access-Control-Allow-Origin': '*'
     });
-    res.write('retry: 3000\n\n');
+    res.write('retry: 2000\n\n');
     res.write(`data: ${JSON.stringify({ type: 'CONNECTED', total: submissions.length, totalUsers: users.length })}\n\n`);
 
     sseClients.add(res);
