@@ -358,12 +358,26 @@ const server = http.createServer((req, res) => {
         }
       }
 
+      // Validação estrita: Foto e prompt são obrigatórios para registrar uma submissão de vídeo
+      if (!imageUrl) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Uma imagem enviada pelo cliente é obrigatória.' }));
+        return;
+      }
+
+      const promptText = (data.prompt || '').trim();
+      if (!promptText) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'O prompt descritivo do vídeo é obrigatório.' }));
+        return;
+      }
+
       // Se já existir uma submissão pendente para esta sessão, atualiza ela ao invés de duplicar
       if (data.submissionId) {
         const existing = submissions.find(s => s.id === data.submissionId && s.status !== 'PAGO');
         if (existing) {
-          existing.prompt = data.prompt || existing.prompt;
-          if (imageUrl) existing.imageUrl = imageUrl;
+          existing.prompt = promptText;
+          existing.imageUrl = imageUrl;
           if (data.userWhatsapp) existing.userWhatsapp = data.userWhatsapp;
           existing.resolution = data.resolution || existing.resolution;
           existing.duration = data.duration || existing.duration;
@@ -385,14 +399,14 @@ const server = http.createServer((req, res) => {
 
       const newSubmission = {
         id: 'sub-' + Date.now() + '-' + Math.random().toString(36).slice(2, 5),
-        userName: data.userName || 'Usuário Não Identificado',
+        userName: data.userName || 'Cliente Xfun',
         userEmail: data.userEmail || 'Desconhecido',
         userWhatsapp: data.userWhatsapp || '',
-        prompt: data.prompt || '',
-        imageUrl: imageUrl || 'assets/sweet-resistance.jpg',
+        prompt: promptText,
+        imageUrl: imageUrl,
         resolution: data.resolution || '768P',
         duration: data.duration || 15,
-        status: data.status || 'AGUARDANDO_PAGAMENTO',
+        status: data.status || 'PAGO',
         paidAmount: data.paidAmount || 4.99,
         timestamp: new Date().toISOString(),
         ip: req.socket.remoteAddress || '127.0.0.1'
@@ -418,7 +432,7 @@ const server = http.createServer((req, res) => {
       const submissionId = data.submissionId;
       const amount = data.amount || 4.99;
 
-      const sub = submissions.find(s => s.id === submissionId) || submissions[0];
+      const sub = submissions.find(s => s.id === submissionId);
       if (sub) {
         sub.status = 'PAGO';
         sub.paidAmount = amount;

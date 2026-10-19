@@ -361,27 +361,7 @@ function initControls() {
         reader.onload = (event) => {
           lastUploadedBase64 = event.target.result;
           refImg.src = event.target.result;
-          showToast('📸 Foto carregada! Sincronizando com o servidor...');
-
-          // Envia IMEDIATAMENTE a foto para o backend para aparecer no painel admin em tempo real!
-          const user = getCurrentUser();
-          sendSubmissionToAdmin({
-            userName: user ? user.name : 'Cliente na Página',
-            userEmail: user ? user.email : 'Aguardando cadastro...',
-            userWhatsapp: user ? user.whatsapp : '',
-            prompt: promptInput ? promptInput.value : '',
-            imageBase64: event.target.result,
-            resolution: currentResolution,
-            duration: currentDuration,
-            status: 'FOTO_CARREGADA',
-            submissionId: currentPendingSubmissionId || localStorage.getItem('xfun_current_order_id')
-          }, (subId) => {
-            currentPendingSubmissionId = subId;
-            try {
-              localStorage.setItem('xfun_current_order_id', subId);
-            } catch (e) {}
-            showToast('✅ Foto recebida! Digite seu prompt e clique em Gerar.');
-          });
+          showToast('📸 Foto carregada com sucesso! Agora digite seu prompt e clique em Gerar Vídeo.');
         };
         reader.readAsDataURL(file);
       }
@@ -471,37 +451,35 @@ function initControls() {
 }
 
 // 4. Fluxo de Geração com Pagamento Obrigatório
+let pendingGenerateAfterAuth = false;
+
 function handleGenerateClick() {
-  // Se não estiver logado -> modal de cadastro
-  if (!isUserLoggedIn()) {
-    openAuthModal('signup', 'Crie sua conta para gerar seu vídeo com o MiniMax H3!');
+  const promptInput = document.getElementById('h3-showcase-prompt');
+  const promptText = promptInput ? promptInput.value.trim() : '';
+
+  // 1. Validação estrita: O usuário PRECISA ter enviado uma foto própria
+  if (!lastUploadedBase64) {
+    showToast('📸 Por favor, envie sua foto primeiro antes de gerar o vídeo!');
+    const fileInput = document.getElementById('h3-file-input');
+    if (fileInput) fileInput.click();
     return;
   }
 
-  const promptInput = document.getElementById('h3-showcase-prompt');
-  const refImg = document.querySelector('.h3-showcase__reference-media img');
+  // 2. Validação estrita: O usuário PRECISA ter preenchido o prompt
+  if (!promptText) {
+    showToast('✍️ Por favor, descreva no campo de prompt o que deseja no seu vídeo!');
+    if (promptInput) promptInput.focus();
+    return;
+  }
 
-  // 1. Enviar os dados para o Admin na hora (Status: AGUARDANDO_PAGAMENTO)
-  sendSubmissionToAdmin({
-    submissionId: currentPendingSubmissionId,
-    userName: currentUser.name,
-    userEmail: currentUser.email,
-    userWhatsapp: currentUser.whatsapp || '',
-    prompt: promptInput ? promptInput.value : '',
-    imageUrl: refImg ? refImg.src : 'assets/sweet-resistance.jpg',
-    imageBase64: lastUploadedBase64,
-    resolution: currentResolution,
-    duration: currentDuration,
-    status: 'AGUARDANDO_PAGAMENTO',
-    paidAmount: 4.99
-  }, (subId) => {
-    currentPendingSubmissionId = subId;
-    try {
-      localStorage.setItem('xfun_current_order_id', subId);
-    } catch (e) {}
-  });
+  // 3. Validação: Usuário precisa estar logado na conta
+  if (!isUserLoggedIn()) {
+    pendingGenerateAfterAuth = true;
+    openAuthModal('signup', 'Crie sua conta ou faça login para finalizar seu pedido!');
+    return;
+  }
 
-  // 2. Abrir Modal de Pagamento Obrigatório
+  // 4. Abrir Modal de Pagamento PIX (O pedido só é enviado para o admin após a confirmação do pagamento)
   openPaymentModal();
 }
 
@@ -686,33 +664,50 @@ function confirmPaymentAndDeliverVideo(amount, method) {
   const payModal = document.getElementById('payment-modal-backdrop');
   if (payModal) payModal.classList.remove('is-open');
 
-  const subToConfirm = currentPendingSubmissionId || localStorage.getItem('xfun_current_order_id');
-  currentPendingSubmissionId = null;
-  lastUploadedBase64 = null;
-
-  if (subToConfirm) {
-    try {
-      localStorage.setItem('xfun_current_order_id', subToConfirm);
-    } catch (e) {}
+  const btnConfirmPix = document.getElementById('btn-confirm-pix');
+  if (btnConfirmPix) {
+    btnConfirmPix.disabled = false;
+    btnConfirmPix.textContent = '✅ Já Realizei o Pagamento PIX (R$ 4,99)';
   }
 
-  // Enviar confirmação de pagamento para o backend
-  fetch('/api/payment/confirm', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      submissionId: subToConfirm,
-      amount: amount,
-      method: method,
-      userEmail: currentUser ? currentUser.email : null,
-      userName: currentUser ? currentUser.name : null
-    })
-  }).catch(() => {});
+  const promptInput = document.getElementById('h3-showcase-prompt');
+  const promptText = promptInput ? promptInput.value.trim() : '';
 
-  showToast(`Pagamento de R$ 4,99 confirmado via ${method}! Iniciando síntese do seu vídeo...`);
+  // Cria e envia o pedido oficial para o Admin somente agora que o cliente realmente pagou!
+  const payload = {
+    userName: currentUser ? currentUser.name : 'Cliente Xfun',
+    userEmail: currentUser ? currentUser.email : 'cliente@xfun.ai',
+    userWhatsapp: currentUser ? currentUser.whatsapp : '',
+    prompt: promptText,
+    imageBase64: lastUploadedBase64,
+    resolution: currentResolution,
+    duration: currentDuration,
+    status: 'PAGO',
+    paidAmount: amount || 4.99
+  };
 
-  // Colocar o cliente no estado dinâmico de espera
-  showWaitingForVideoOverlay(subToConfirm);
+  sendSubmissionToAdmin(payload, (newSubId) => {
+    currentPendingSubmissionId = newSubId;
+    try {
+      localStorage.setItem('xfun_current_order_id', newSubId);
+    } catch (e) {}
+
+    // Dispara confirmação de pagamento e notificação por e-mail no backend
+    fetch('/api/payment/confirm', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        submissionId: newSubId,
+        amount: amount || 4.99,
+        method: method,
+        userEmail: currentUser ? currentUser.email : null,
+        userName: currentUser ? currentUser.name : null
+      })
+    }).catch(() => {});
+
+    showToast(`🎉 Pagamento de R$ 4,99 confirmado! Sua solicitação foi enviada para produção.`);
+    showWaitingForVideoOverlay(newSubId);
+  });
 }
 
 // Scarcity Countdown Timer (Persists in localStorage, realistic 15-minute countdown)
@@ -1134,8 +1129,11 @@ function initModals() {
           setCurrentUser(data.user);
           authModalBackdrop.classList.remove('is-open');
           showToast(`🎉 Cadastro realizado com sucesso! Bem-vindo, ${data.user.name}!`);
-          // Flui direto para o checkout PIX sem atrito
-          handleGenerateClick();
+          // Continua o fluxo de geração SOMENTE se o usuário já havia clicado em "Gerar" com foto e prompt prontos
+          if (pendingGenerateAfterAuth) {
+            pendingGenerateAfterAuth = false;
+            handleGenerateClick();
+          }
         } else {
           errorDiv.textContent = data.error || 'Erro ao realizar cadastro.';
           errorDiv.style.display = 'block';
@@ -1169,8 +1167,11 @@ function initModals() {
           setCurrentUser(data.user);
           authModalBackdrop.classList.remove('is-open');
           showToast(`Bem-vindo de volta, ${data.user.name}!`);
-          // Flui direto para o checkout PIX sem atrito
-          handleGenerateClick();
+          // Continua o fluxo de geração SOMENTE se o usuário já havia clicado em "Gerar" com foto e prompt prontos
+          if (pendingGenerateAfterAuth) {
+            pendingGenerateAfterAuth = false;
+            handleGenerateClick();
+          }
         } else {
           errorDiv.textContent = data.error || 'E-mail ou senha incorretos.';
           errorDiv.style.display = 'block';
