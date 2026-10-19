@@ -235,27 +235,33 @@
               </div>
             </div>
 
-            <!-- Delivered Video Download & Notification Pill -->
-            <div id="delivered-video-bar" class="delivered-video-bar" style="display: none; position: absolute; bottom: 14px; left: 14px; right: 14px; z-index: 25; background: rgba(14, 9, 13, 0.95); backdrop-filter: blur(12px); border: 1px solid rgba(255, 30, 66, 0.6); border-radius: 12px; padding: 12px 18px; align-items: center; justify-content: space-between; box-shadow: 0 4px 25px rgba(0, 0, 0, 0.8);">
-              <div style="display: flex; align-items: center; gap: 10px; cursor: pointer;" id="delivered-bar-info" title="Clique para ver a Central de Download">
-                <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 10px #22c55e;"></span>
-                <div>
-                  <div id="delivered-status-text" style="font-size: 13px; font-weight: 750; color: #ffffff;">Seu vídeo exclusivo foi entregue!</div>
-                  <div style="font-size: 11px; color: #a1a1aa;">Gerado via MiniMax H3 Neural Engine · Clique para ver detalhes</div>
+            <!-- Delivered Video Download & Notification Bar -->
+            <div id="delivered-video-bar" class="delivered-video-bar" style="display: none;">
+              <div class="delivered-bar-left" id="delivered-bar-info" title="Clique para ver a Central de Download">
+                <span class="delivered-pulse-dot"></span>
+                <div class="delivered-text-wrap">
+                  <div id="delivered-status-text" class="delivered-title">Seu vídeo exclusivo foi entregue!</div>
+                  <div class="delivered-subtitle">Gerado via MiniMax H3 Neural Engine · Pronto para salvar</div>
                 </div>
               </div>
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <button id="btn-reopen-dl-hub" type="button" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.22); color: #fff; font-size: 11px; font-weight: 700; padding: 7px 12px; border-radius: 20px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; transition: background 0.15s;">
-                  📦 Central de Download
+              <div class="delivered-bar-actions">
+                <button id="btn-reopen-dl-hub" type="button" class="btn-dl-hub" title="Ver Central de Download">
+                  📦 Central
                 </button>
-                <a id="btn-download-delivered-video" href="#" download="meu-video-xfun.mp4" style="background: linear-gradient(135deg, var(--xfun-red) 0%, var(--xfun-red-dark) 100%); color: #ffffff; text-decoration: none; font-size: 12px; font-weight: 750; padding: 8px 18px; border-radius: 20px; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 10px rgba(255, 30, 66, 0.4); transition: transform 0.15s ease; cursor: pointer;">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <a id="btn-download-delivered-video" href="#" download="meu-video-xfun.mp4" class="btn-dl-video" title="Baixar arquivo MP4">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                     <polyline points="7 10 12 15 17 10"></polyline>
                     <line x1="12" y1="15" x2="12" y2="3"></line>
                   </svg>
-                  <span>Baixar Vídeo (.mp4)</span>
+                  <span>Baixar Vídeo</span>
                 </a>
+                <button id="btn-close-delivered-bar" type="button" class="btn-dl-close" title="Fechar e ver o vídeo completo">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
               </div>
             </div>
           </div>

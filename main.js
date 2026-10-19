@@ -98,6 +98,7 @@ let currentDuration = 15;
 let currentCaseIndex = 0;
 let lastUploadedBase64 = null;
 let currentPendingSubmissionId = null;
+let deliveredBarDismissed = false;
 
 // User state
 let currentUser = null;
@@ -963,10 +964,18 @@ function deliverVideoToClient(videoUrl, showToastNotice = true) {
       } catch (e) {}
     }
   };
-  if (btnReopen) btnReopen.onclick = reopenHandler;
-  if (barInfo) barInfo.onclick = reopenHandler;
+  // Botão para fechar a barra de entrega e assistir o vídeo limpo sem obstrução
+  const btnCloseBar = document.getElementById('btn-close-delivered-bar');
+  if (btnCloseBar) {
+    btnCloseBar.onclick = (e) => {
+      e.stopPropagation();
+      deliveredBarDismissed = true;
+      if (deliveredBar) deliveredBar.style.display = 'none';
+    };
+  }
 
   if (deliveredBar) {
+    deliveredBarDismissed = false;
     deliveredBar.style.display = 'flex';
   }
 
@@ -1006,6 +1015,7 @@ function initClientOrderListener() {
 
   // 3. Polling de redundância a cada 5s caso o SSE seja desconectado
   setInterval(() => {
+    if (deliveredBarDismissed) return;
     const currentOrderId = localStorage.getItem('xfun_current_order_id');
     const deliveredBar = document.getElementById('delivered-video-bar');
     if (currentOrderId && (!deliveredBar || deliveredBar.style.display !== 'flex')) {
