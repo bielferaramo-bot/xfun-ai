@@ -565,70 +565,40 @@
       <!-- Conteúdo de Ação Mobile-First -->
       <div id="pay-content-pix" style="text-align: center;">
 
-        <!-- 1. Botão Principal Mobile: Copia e Cola 1 Toque -->
-        <button id="btn-copy-pix-main" type="button" class="btn-pix-copy-hero" onclick="copyPixKey()">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
-            <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
-          </svg>
-          <span id="btn-copy-pix-text">📋 COPIAR CÓDIGO PIX (1 TOQUE)</span>
-        </button>
-
-        <p style="font-size: 11px; color: #a8949b; margin: 8px 0 12px;">
-          Toque acima, abra o aplicativo do seu banco e cole no <b>PIX Copia e Cola</b>.
-        </p>
-
-        <!-- 2. Botão Direto para o App do Banco -->
-        <a id="btn-pix-direct-link" href="#" onclick="handlePixDirectLink(event)" class="btn-pix-bank-app" style="margin-bottom: 12px;">
-          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-            <polyline points="15 3 21 3 21 9"></polyline>
-            <line x1="10" y1="14" x2="21" y2="3"></line>
-          </svg>
-          <span>Abrir App do Banco / Pagar</span>
-        </a>
-
-        <!-- 3. Chave PIX Oficial (E-mail) -->
-        <div style="background: #150d12; border: 1px solid #3d1b26; border-radius: 10px; padding: 10px 12px; margin-bottom: 12px; text-align: left;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-            <span style="font-size: 10.5px; font-weight: 700; color: #ff4d6d; text-transform: uppercase; letter-spacing: 0.04em;">
-              Chave PIX (E-mail Oficial):
-            </span>
-            <button type="button" class="btn btn-outline" onclick="copyPixEmailKey()" style="font-size: 10.5px; padding: 3px 8px; height: auto;">
-              Copiar
-            </button>
-          </div>
-          <div style="display: flex; align-items: center; justify-content: space-between;">
-            <span id="pix-email-display" style="font-size: 13.5px; font-weight: 750; color: #ffffff; word-break: break-all;">xfun.usocom.ia@gmail.com</span>
-            <span style="font-size: 10.5px; color: #22c55e; font-weight: 700; background: rgba(34, 197, 94, 0.12); padding: 2px 6px; border-radius: 4px; white-space: nowrap; margin-left: 6px;">● Ativa</span>
-          </div>
-        </div>
-
-        <!-- Input oculto para cópia garantida do payload -->
-        <input id="pix-key-input" type="hidden" value="00020126460014br.gov.bcb.pix0124xfun.usocom.ia@gmail.com52040000530398654044.995802BR5904XFUN6009SAO PAULO62070503***6304E079">
-
-        <!-- 4. Toggle opcional para ver QR Code (ideal para quem está no PC ou pagando com outro celular) -->
-        <div>
-          <button type="button" id="toggle-pix-qr" class="btn-toggle-qr" onclick="togglePixQrCode()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <!-- 1. Gerar QR Code PIX (Em Cima) -->
+        <div style="margin-bottom: 10px;">
+          <button type="button" id="toggle-pix-qr" class="btn-toggle-qr" onclick="generateOrTogglePixQr()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M3 7V5a2 2 0 0 1 2-2h2"></path>
               <path d="M17 3h2a2 2 0 0 1 2 2v2"></path>
               <path d="M21 17v2a2 2 0 0 1-2 2h-2"></path>
               <path d="M7 21H5a2 2 0 0 1-2-2v-2"></path>
               <rect width="6" height="6" x="9" y="9" rx="1"></rect>
             </svg>
-            <span id="toggle-pix-qr-text">📷 Ver QR Code (pagar com outro celular)</span>
+            <span id="toggle-pix-qr-text">Gerar QR Code PIX</span>
           </button>
           
-          <div id="pix-qr-collapsible" style="display: none; margin-bottom: 14px;">
-            <div style="background: #ffffff; padding: 10px; border-radius: 12px; width: 170px; height: 170px; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 25px rgba(255,30,66,0.15);">
-              <div id="pix-qrcode-box" style="width: 150px; height: 150px; display: flex; align-items: center; justify-content: center;">
-                <img id="pix-qrcode-img" src="assets/pix-qr-499.png" alt="QR Code PIX R$ 4,99" width="150" height="150" style="display: block; border-radius: 6px;">
+          <div id="pix-qr-collapsible" style="display: none; margin-top: 10px; margin-bottom: 8px;">
+            <div style="background: #ffffff; padding: 10px; border-radius: 12px; width: 160px; height: 160px; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 25px rgba(255,30,66,0.2);">
+              <div id="pix-qrcode-box" style="width: 140px; height: 140px; display: flex; align-items: center; justify-content: center;">
+                <img id="pix-qrcode-img" src="assets/pix-qr-499.png" alt="QR Code PIX R$ 4,99" width="140" height="140" style="display: block; border-radius: 6px;">
               </div>
             </div>
-            <p style="font-size: 11px; color: #a8949b; margin: 0;">Aponte a câmera de outro celular para ler o QR Code.</p>
+            <p style="font-size: 11px; color: #a8949b; margin: 0;">Aponte a câmera do aplicativo do seu banco para ler o QR Code.</p>
           </div>
         </div>
+
+        <!-- Input oculto para cópia garantida do payload -->
+        <input id="pix-key-input" type="hidden" value="00020126460014br.gov.bcb.pix0124xfun.usocom.ia@gmail.com52040000530398654044.995802BR5904XFUN6009SAO PAULO62070503***6304E079">
+
+        <!-- 2. Botão de Gerar o Link de Pagamento (Em Baixo) -->
+        <button id="btn-copy-pix-main" type="button" class="btn-pix-copy-hero" onclick="generatePaymentLink()" style="margin-bottom: 12px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+          </svg>
+          <span id="btn-copy-pix-text">Gerar Link de Pagamento</span>
+        </button>
 
         <!-- 5. Botão de Confirmação Final -->
         <button id="btn-confirm-pix" type="button" class="custom-btn-primary" style="padding: 14px; font-size: 15px; width: 100%; border-radius: 12px; margin-top: 4px;">

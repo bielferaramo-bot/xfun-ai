@@ -603,7 +603,26 @@ function openPaymentModal(amount = 4.99) {
   renderPixQrCode(payload);
 }
 
-window.copyPixKey = function() {
+window.generateOrTogglePixQr = function() {
+  const box = document.getElementById('pix-qr-collapsible');
+  const txt = document.getElementById('toggle-pix-qr-text');
+  if (box) {
+    const isHidden = box.style.display === 'none';
+    box.style.display = isHidden ? 'block' : 'none';
+    if (txt) {
+      txt.textContent = isHidden ? 'Ocultar QR Code' : 'Gerar QR Code PIX';
+    }
+    if (isHidden) {
+      const input = document.getElementById('pix-key-input');
+      const payload = input ? input.value : '';
+      if (payload) renderPixQrCode(payload);
+      showToast('📷 QR Code gerado! Aponte a câmera do aplicativo do seu banco para pagar.');
+    }
+  }
+};
+window.togglePixQrCode = window.generateOrTogglePixQr;
+
+window.generatePaymentLink = function() {
   const input = document.getElementById('pix-key-input');
   const code = input ? input.value : '';
   if (code) {
@@ -614,32 +633,14 @@ window.copyPixKey = function() {
 
     const btnText = document.getElementById('btn-copy-pix-text');
     if (btnText) {
-      const orig = btnText.textContent;
-      btnText.textContent = '✅ COPIADO! ABRA SEU BANCO E COLE';
-      setTimeout(() => { btnText.textContent = orig; }, 3500);
+      const orig = btnText.innerHTML;
+      btnText.innerHTML = '✅ LINK COPIADO! COLE NO SEU BANCO';
+      setTimeout(() => { btnText.innerHTML = orig; }, 3500);
     }
-    showToast('✅ Código PIX copiado! Abra seu app bancário e cole no PIX Copia e Cola.');
+    showToast('📋 Link de pagamento copiado com sucesso! Abra o app do seu banco e cole no PIX Copia e Cola.');
   }
 };
-
-window.copyPixEmailKey = function() {
-  try {
-    navigator.clipboard.writeText(OFFICIAL_PIX_EMAIL);
-  } catch (e) {}
-  showToast(`🔑 Chave PIX (${OFFICIAL_PIX_EMAIL}) copiada com sucesso!`);
-};
-
-window.togglePixQrCode = function() {
-  const box = document.getElementById('pix-qr-collapsible');
-  const txt = document.getElementById('toggle-pix-qr-text');
-  if (box) {
-    const isHidden = box.style.display === 'none';
-    box.style.display = isHidden ? 'block' : 'none';
-    if (txt) {
-      txt.textContent = isHidden ? 'Ocultar QR Code' : '📷 Ver QR Code (pagar com outro celular)';
-    }
-  }
-};
+window.copyPixKey = window.generatePaymentLink;
 
 window.handlePixDirectLink = function(e) {
   if (e) e.preventDefault();
