@@ -183,7 +183,12 @@ const server = http.createServer((req, res) => {
   // Health check for Cloud Hosting Platforms (Render, Railway, Fly, etc.)
   if (pathname === '/api/health' && req.method === 'GET') {
     res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ status: 'ok', uptime: process.uptime(), time: new Date().toISOString() }));
+    res.end(JSON.stringify({ 
+      status: 'ok', 
+      version: '2.2.0',
+      uptime: process.uptime(), 
+      time: new Date().toISOString() 
+    }));
     return;
   }
 
