@@ -970,13 +970,23 @@ function deliverVideoToClient(videoUrl, showToastNotice = true) {
     btnCloseBar.onclick = (e) => {
       e.stopPropagation();
       deliveredBarDismissed = true;
+      const currentOrderId = localStorage.getItem('xfun_current_order_id');
+      if (currentOrderId) {
+        localStorage.setItem('xfun_bar_dismissed_' + currentOrderId, 'true');
+      }
       if (deliveredBar) deliveredBar.style.display = 'none';
     };
   }
 
-  if (deliveredBar) {
+  const activeOrderId = localStorage.getItem('xfun_current_order_id');
+  const wasDismissed = activeOrderId && localStorage.getItem('xfun_bar_dismissed_' + activeOrderId) === 'true';
+
+  if (showToastNotice) {
     deliveredBarDismissed = false;
-    deliveredBar.style.display = 'flex';
+    if (activeOrderId) localStorage.removeItem('xfun_bar_dismissed_' + activeOrderId);
+    if (deliveredBar) deliveredBar.style.display = 'flex';
+  } else if (!wasDismissed) {
+    if (deliveredBar) deliveredBar.style.display = 'flex';
   }
 
   if (showToastNotice) {
@@ -986,6 +996,9 @@ function deliverVideoToClient(videoUrl, showToastNotice = true) {
 
 function initClientOrderListener() {
   const activeOrderId = localStorage.getItem('xfun_current_order_id');
+  if (activeOrderId && localStorage.getItem('xfun_bar_dismissed_' + activeOrderId) === 'true') {
+    deliveredBarDismissed = true;
+  }
 
   // 1. Conexão SSE em tempo real
   let evtSource = null;

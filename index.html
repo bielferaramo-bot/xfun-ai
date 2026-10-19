@@ -237,30 +237,32 @@
 
             <!-- Delivered Video Download & Notification Bar -->
             <div id="delivered-video-bar" class="delivered-video-bar" style="display: none;">
-              <div class="delivered-bar-left" id="delivered-bar-info" title="Clique para ver a Central de Download">
-                <span class="delivered-pulse-dot"></span>
-                <div class="delivered-text-wrap">
-                  <div id="delivered-status-text" class="delivered-title">Seu vídeo exclusivo foi entregue!</div>
-                  <div class="delivered-subtitle">Gerado via MiniMax H3 Neural Engine · Pronto para salvar</div>
+              <div class="delivered-bar-header">
+                <div class="delivered-bar-left" id="delivered-bar-info" title="Clique para ver a Central de Download">
+                  <span class="delivered-pulse-dot"></span>
+                  <div class="delivered-text-wrap">
+                    <span id="delivered-status-text" class="delivered-title">🎉 Seu vídeo exclusivo foi entregue!</span>
+                  </div>
                 </div>
-              </div>
-              <div class="delivered-bar-actions">
-                <button id="btn-reopen-dl-hub" type="button" class="btn-dl-hub" title="Ver Central de Download">
-                  📦 Central
-                </button>
-                <a id="btn-download-delivered-video" href="#" download="meu-video-xfun.mp4" class="btn-dl-video" title="Baixar arquivo MP4">
+                <button id="btn-close-delivered-bar" type="button" class="btn-dl-close" aria-label="Fechar aviso" title="Fechar e ver o vídeo completo">
                   <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
+              </div>
+
+              <div class="delivered-bar-actions">
+                <a id="btn-download-delivered-video" href="#" download="meu-video-xfun.mp4" class="btn-dl-video" title="Baixar arquivo MP4">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                     <polyline points="7 10 12 15 17 10"></polyline>
                     <line x1="12" y1="15" x2="12" y2="3"></line>
                   </svg>
-                  <span>Baixar Vídeo</span>
+                  <span>Baixar Vídeo (.mp4)</span>
                 </a>
-                <button id="btn-close-delivered-bar" type="button" class="btn-dl-close" title="Fechar e ver o vídeo completo">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                  </svg>
+                <button id="btn-reopen-dl-hub" type="button" class="btn-dl-hub" title="Ver Central de Download">
+                  📦 Detalhes
                 </button>
               </div>
             </div>
